@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>Internship Diary Entry</title>
+    <style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 20px;
+    line-height: 1.6;
+    background-color: #f0f0f0; /* Light Gray Background */
+    color: #333;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+h1{
+    text-align: center;
+}
+
+h1, h3 {
+    color: #4a6572; /* Dark Slate Gray Headings */
+    margin-bottom: 15px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #5f6368; /* Medium Gray Label Text */
+}
+
+input, button {
+    display: block;
+    width: calc(100% - 18px);
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #b0bec5; /* Light Steel Blue Border */
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+    background-color: white; /* White Input Background */
+}
+
+textarea {
+    display: block;
+    width: calc(100% - 18px);
+    padding: 15px;
+    margin: 10px 0;
+    border: 2px solid #607d8b; /* Blue Gray Border */
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-size: 16px;
+    resize: none;
+    overflow: hidden;
+    background-color: #e8f5e9; /* Light Green Background */
+    font-family: 'Courier New', monospace;
+    line-height: 1.8;
+    box-shadow: 0 4px 8px rgba(96, 125, 139, 0.2); /* Subtle Shadow */
+    transition: height 0.3s ease; /* Smooth Transition */
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: #37474f; /* Darker Blue Gray on Focus */
+    box-shadow: 0 0 5px rgba(96, 125, 139, 0.5);
+}
+
+button {
+    background-color: #546e7a; /* Blue Gray Button */
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #37474f; /* Darker Blue Gray on Hover */
+}
+
+#entries {
+    margin-top: 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 10px;
+    padding: 10px;
+    display: flex;
+}
+
+.entry {
+    display: inline-block;
+    border: 1px solid #cfd8dc;
+    padding: 15px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    min-width: 360px;
+    box-sizing: border-box;
+}
+
+.entry p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.delete-btn {
+    display: inline;
+    margin-top: 10px; /* Add some space above the button */
+    align-self: center; /* Center the button */
+    width: 100px;
+    background: #d32f2f; /* Dark Red Delete Button */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.delete-btn:hover {
+    background: #b71c1c; /* Darker Red on Hover */
+}
+
+/* Sub-text Styling */
+.sub-text {
+    font-size: smaller;
+    padding: 5px;
+    color: #546e7a;
+}
+
+.edit-btn {
+  background-color: #ffc107; /* Yellow edit button */
+  display: inline;
+  color: black;
+  border: none;
+  width: 100px;
+  margin-top: 10px; /* Add some space above the button */
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 5px; /* Add some space between buttons */
+}
+
+.edit-btn:hover {
+  background-color: black; /* Darker yellow on hover */
+  color: #ffc107;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        margin: 10px;
+    }
+    input, textarea, button {
+        padding: 8px;
+        font-size: 14px;
+    }
+    .entry {
+        padding: 10px;
+    }
+    .delete-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    .edit-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+}
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Intership Daily Diary Entry</h1>
+
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="day">Day:</label>
+                <input type="number" id="day" placeholder="Enter day">
+            </div>
+
+            <div class="form-group">
+                <label for="date">Date:</label>
+                <input type="date" id="date">
+            </div>
+
+            <div class="form-group">
+                <label for="industry">Industry / Institute Name:</label>
+                <input type="text" id="industry" placeholder="Enter industry">
+                <span class="sub-text">Name of the Industry / Institute where the Internship is being undertaken</span>
+            </div>
+
+            <div class="form-group">
+                <label for="inTime">In-Time:</label>
+                <input type="time" id="inTime">
+            </div>
+
+            <div class="form-group">
+                <label for="outTime">Out-Time:</label>
+                <input type="time" id="outTime">
+            </div>
+
+            <div class="form-group">
+                <label for="department">Department / Division:</label>
+                <input type="text" id="department" placeholder="Enter department">
+            </div>
+
+            <div class="form-group">
+                <label for="software">Software / Product:</label>
+                <input type="text" id="software" placeholder="Enter software used">
+                <span class="sub-text">Name of the Software / Product being worked on</span>
+            </div>
+
+            <div class="form-group">
+                <label for="hod">HOD / Supervisor (Name & Email):</label>
+                <input type="text" id="hod" placeholder="Enter HOD details">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="main">Main points of the day:</label>
+            <textarea id="main" rows="4" placeholder="Enter today's diary content"></textarea>
+        </div>
+
+        <button id="addEntryBtn" onclick="addEntry()">Add Entry</button>
+
+        <h3 id="entriesHeading" style="display: none;">Entries</h3>
+        <div id="entries"></div>
+
+        <button onclick="generatePDF()">Generate PDF</button>
+    </div>
+
+    <script>
+
+        let dateInput = document.getElementById("date");
+        let inTimeInput = document.getElementById("inTime");
+        let outTimeInput = document.getElementById("outTime");
+        let textarea = document.getElementById('main'); // Get the textarea element
+
+        dateInput.addEventListener('click', function () {
+            this.showPicker();
+        });
+        inTimeInput.addEventListener('click', function () {
+            this.showPicker();
+        });
+        outTimeInput.addEventListener('click', function () {
+            this.showPicker();
+        });
+
+        textarea.addEventListener('input', function () {
+            this.style.height = 'auto'; // Reset the height to auto
+            this.style.height = (this.scrollHeight) + 'px'; // Set the height to the scroll height
+        });
+
+        textarea.addEventListener('wheel', function (event) { // Optional: Prevent mouse wheel scrolling
+            event.preventDefault();
+        });
+        
+        let entries = [];
+        let tempFormData = {};
+        let editingIndex = -1; // To store the index of the entry being edited
+
+        function editEntry(index) {
+
+            tempFormData = {
+                day: document.getElementById("day").value,
+                date: document.getElementById("date").value,
+                industry: document.getElementById("industry").value,
+                inTime: document.getElementById("inTime").value,
+                outTime: document.getElementById("outTime").value,
+                department: document.getElementById("department").value,
+                software: document.getElementById("software").value,
+                hod: document.getElementById("hod").value,
+                main: document.getElementById("main").value
+            };
+
+            const entry = entries[index];
+
+            document.getElementById("day").value = entry.day;
+            document.getElementById("date").value = entry.date;
+            document.getElementById("industry").value = entry.industry;
+            document.getElementById("inTime").value = entry.inTime;
+            document.getElementById("outTime").value = entry.outTime;
+            document.getElementById("department").value = entry.department;
+            document.getElementById("software").value = entry.software;
+            document.getElementById("hod").value = entry.hod;
+            document.getElementById("main").value = entry.main;
+
+            const addEntryButton = document.getElementById("addEntryBtn");
+            addEntryButton.textContent = "Save Changes";
+            addEntryButton.style.backgroundColor = "#ffc107";
+            addEntryButton.style.color = "black";
+
+            editingIndex = index;
+        }
+
+        function addEntry() {
+            let day = document.getElementById("day").value;
+            let date = document.getElementById("date").value;
+            let industry = document.getElementById("industry").value;
+            let inTime = document.getElementById("inTime").value;
+            let outTime = document.getElementById("outTime").value;
+            let department = document.getElementById("department").value;
+            let software = document.getElementById("software").value;
+            let hod = document.getElementById("hod").value;
+            let main = document.getElementById("main").value;
+
+            textarea.style.height = "108px";
+
+            if (!day || !date || !main) {
+                alert("Day, Date, and Diary Content are required!");
+                return;
+            }
+
+            let entry = { day, date, industry, inTime, outTime, department, software, hod, main };
+            
+            if (editingIndex !== -1) {
+
+                entries[editingIndex] = entry;
+
+                document.getElementById("day").value = tempFormData.day;
+                document.getElementById("date").value = tempFormData.date;
+                document.getElementById("industry").value = (tempFormData.industry !== undefined && tempFormData.industry !== null) ? tempFormData.industry : document.getElementById("industry").value;
+                document.getElementById("inTime").value = (tempFormData.inTime !== undefined && tempFormData.inTime !== null) ? tempFormData.inTime : document.getElementById("inTime").value;
+                document.getElementById("outTime").value = (tempFormData.outTime !== undefined && tempFormData.outTime !== null) ? tempFormData.outTime : document.getElementById("outTime").value;
+                document.getElementById("department").value = (tempFormData.department !== undefined && tempFormData.department !== null) ? tempFormData.department : document.getElementById("department").value;
+                document.getElementById("software").value = (tempFormData.software !== undefined && tempFormData.software !== null) ? tempFormData.software : document.getElementById("software").value;
+                document.getElementById("hod").value = (tempFormData.hod !== undefined && tempFormData.hod !== null) ? tempFormData.hod : document.getElementById("hod").value;
+                document.getElementById("main").value = tempFormData.main;
+
+                editingIndex = -1;
+
+                document.getElementById("addEntryBtn").textContent = "Add Entry";
+                document.getElementById("addEntryBtn").style.backgroundColor = "#546e7a";
+                document.getElementById("addEntryBtn").style.color = "white";
+            } 
+            else {
+                entries.push(entry);
+                clearFields();
+            }
+            displayEntries();
+        }
+
+       function displayEntries() {
+
+            if (entries.length > 0) {
+               document.getElementById("entriesHeading").style.display = "block";
+            }
+            else {
+                document.getElementById("entriesHeading").style.display = "none";
+            }
+
+            let entriesDiv = document.getElementById("entries");
+            entriesDiv.innerHTML = "";
+            entries.forEach((entry, index) => {
+                let div = document.createElement("div");
+                let formattedMain = entry.main.replace(/\n/g, "<br>");
+                div.className = "entry";
+                div.innerHTML = `
+            <div>
+                <strong>Day ${entry.day} - ${entry.date}</strong><br>
+                <strong>Industry:</strong> ${entry.industry}<br>
+                <strong>In-Time:</strong> ${entry.inTime}<br>
+                <strong>Out-Time:</strong> ${entry.outTime}<br>
+                <strong>Department:</strong> ${entry.department}<br>
+                <strong>Software/Product:</strong> ${entry.software}<br>
+                <strong>HOD:</strong> ${entry.hod}<br><br>
+                <strong>Main Points:</strong><br>
+                <p style="display: flex;">${formattedMain}</p>
+            </div>
+            <button class="delete-btn" onclick="deleteEntry(${index})">Delete</button>
+            <button class="edit-btn" onclick="editEntry(${index})">Edit</button> 
+        `;
+                entriesDiv.appendChild(div);
+            });
+        }
+
+        function deleteEntry(index) {
+            entries.splice(index, 1);
+            displayEntries();
+        }
+
+        function clearFields() {
+            document.getElementById("day").value = "";
+            document.getElementById("date").value = "";
+            document.getElementById("main").value = "";
+        }
+
+        async function generatePDF() {
+            if (entries.length === 0) {
+                alert("No entries added!");
+                return;
+            }
+
+            try {
+                let response = await fetch("http://127.0.0.1:5000/generate-pdf", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ entries })
+                });
+
+                if (response.ok) {
+                    // alert("PDF generated successfully! Check your system.");
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+
+                    const days = entries.map(entry => parseInt(entry.day)); // Extract day values as numbers
+                    const minDay = Math.min(...days);
+                    const maxDay = Math.max(...days);
+
+                    if (entries.length === 1) {
+                        a.download = `Day_${entries[0].day}_Diary.pdf`;
+                    } else {
+                        a.download = `Day_${minDay}_to_${maxDay}_Diary.pdf`;
+                    } // Use dynamic filename
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                    alert("PDF downloaded successfully!");
+                } else {
+                    let errorData = await response.json();
+                    alert("Error: " + errorData.error);
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Failed to connect to the server.");
+            }
+        }
+    </script>
+</body>
+</html>
