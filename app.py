@@ -31,15 +31,15 @@ def generate_pdf():
             doc = fitz.open(PDF_TEMPLATE)
             page = doc[0]
 
-            day = entry.get("day", "1")
-            date = entry.get("date", datetime.today().strftime("%d/%m/%Y"))
-            industry = entry.get("industry", "Company Name")
-            in_time = entry.get("inTime", "9:00 AM")
-            out_time = entry.get("outTime", "5:00 PM")
-            department = entry.get("department", "Department")
-            software = entry.get("software", "Software Used")
-            hod = entry.get("hod", "HOD Name & Email")
-            main = entry.get("main", "Today's diary content.")
+            day = entry.get("day")
+            date = entry.get("date")
+            industry = entry.get("industry")
+            in_time = entry.get("inTime")
+            out_time = entry.get("outTime")
+            department = entry.get("department")
+            software = entry.get("software")
+            hod = entry.get("hod")
+            main = entry.get("main")
 
             text_positions = [
                 (130, 178, day), (440, 178, date), (300, 198, industry),

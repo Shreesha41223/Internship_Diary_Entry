@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <title>Internship Diary Entry</title>
     <style>
 body {
@@ -311,6 +310,9 @@ button:hover {
             document.getElementById("hod").value = entry.hod;
             document.getElementById("main").value = entry.main;
 
+            const inputEvent = new Event('input');
+            document.getElementById("main").dispatchEvent(inputEvent);
+
             const addEntryButton = document.getElementById("addEntryBtn");
             addEntryButton.textContent = "Save Changes";
             addEntryButton.style.backgroundColor = "#ffc107";
@@ -418,7 +420,7 @@ button:hover {
             }
 
             try {
-                let response = await fetch("http://127.0.0.1:5000/generate-pdf", {
+                let response = await fetch("https://fill-internship-diary.onrender.com/generate-pdf", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ entries })
