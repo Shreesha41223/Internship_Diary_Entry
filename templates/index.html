@@ -271,7 +271,7 @@ button:hover {
         let outTimeInput = document.getElementById("outTime");
         let textarea = document.getElementById('main'); // Get the textarea element
         const text_limits = document.getElementById('text_limits'); // Get the character count element
-        const maxCharsPerLine = 75;
+        const maxCharsPerLine = 100;
         const maxLines = 16;
 
         dateInput.addEventListener('click', function () {
@@ -284,7 +284,7 @@ button:hover {
             this.showPicker();
         });
 
-        function processText(main, maxLines = 16, maxCharsPerLine = 75) {
+        function processText(main, maxLines = 16, maxCharsPerLine = 100) {
                 const lines = main.split('\n');
                 const processedLines = [];
                 let lineCount = 0;
