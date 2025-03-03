@@ -74,6 +74,7 @@ textarea {
     line-height: 1.8;
     box-shadow: 0 4px 8px rgba(96, 125, 139, 0.2); /* Subtle Shadow */
     transition: height 0.3s ease; /* Smooth Transition */
+    transition: background-color 0.3s ease; /* Smooth Transition */
 }
 
 input:focus, textarea:focus {
@@ -87,11 +88,16 @@ button {
     color: white;
     border: none;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
 }
 
 button:hover {
     background-color: #37474f; /* Darker Blue Gray on Hover */
+}
+
+button:disabled {
+    background-color: #b0bec5; /* Light Steel Blue Button */
+    cursor: not-allowed;
 }
 
 #entries {
@@ -259,7 +265,7 @@ button:hover {
         <h3 id="entriesHeading" style="display: none;">Entries</h3>
         <div id="entries"></div>
 
-        <button onclick="generatePDF()">Generate PDF</button>
+        <button id="generatePdfBtn" onclick="generatePDF()">Generate PDF</button>
     </div>
 
     <script>
@@ -271,8 +277,10 @@ button:hover {
         let outTimeInput = document.getElementById("outTime");
         let textarea = document.getElementById('main'); // Get the textarea element
         const text_limits = document.getElementById('text_limits'); // Get the character count element
-        const maxCharsPerLine = 95;
-        const maxLines = 16;
+        const addEntryBtn = document.getElementById('addEntryBtn'); // Get the add entry button
+        const generatePdfBtn = document.getElementById('generatePdfBtn'); // Get the generate PDF button
+        const maxCharsPerLine = 75;
+        const maxLines = 15;
 
         dateInput.addEventListener('click', function () {
             this.showPicker();
@@ -284,78 +292,55 @@ button:hover {
             this.showPicker();
         });
 
-        function processText(main, maxLines = 16, maxCharsPerLine = 95) {
-                const lines = main.split('\n');
-                const processedLines = [];
-                let lineCount = 0;
-
-                for (const line of lines) {
-                    const words = line.split(' ');
-                    let currentLine = '';
-
-                    for (const word of words) {
-                        if (currentLine.length + word.length + (currentLine ? 1 : 0) <= maxCharsPerLine) {
-                            currentLine += (currentLine ? ' ' : '') + word;
-                        } else {
-                            if (lineCount < maxLines) {
-                                processedLines.push(currentLine);
-                                lineCount++;
-                                currentLine = word;
-                            } else {
-                                // Limit exceeded, show popup and return
-                                alert("Maximum lines exceeded!");
-                                return processedLines.slice(0, maxLines).join('\n');
-                            }
-                        }
-                    }
-
-                    if (currentLine && lineCount < maxLines) {
-                        processedLines.push(currentLine);
-                        lineCount++;
-                    }
-                    if (lineCount >= maxLines) {
-                        alert("Maximum lines exceeded!");
-                        return processedLines.slice(0, maxLines).join('\n');
-                    }
-                }
-
-                return processedLines.slice(0, maxLines).join('\n');
-        }
-
-        textarea.addEventListener('paste', function (event) {
-            const pastedText = (event.clipboardData || window.clipboardData).getData('text');
-            const newText = this.value + pastedText;
-            const processedText = processText(newText, maxLines, maxCharsPerLine);
-
-            this.value = processedText; // Update the textarea with processed text
-            this.style.height = 'auto';
-            this.style.height = (this.scrollHeight) + 'px';
-            event.preventDefault(); // Prevent default paste
-
-            // Update character and line count display (optional)
-            const lines = processedText.split('\n');
-            let charCount = 0;
-            for (const line of lines) {
-                charCount += line.length;
-            }
-            text_limits.innerHTML = `${charCount} / ${maxLines * maxCharsPerLine} characters (${lines.length} / ${maxLines} lines)`;
-        });
-
         textarea.addEventListener('input', function () {
             this.style.height = 'auto';
             this.style.height = (this.scrollHeight) + 'px';
 
-            const processedText = processText(this.value, maxLines, maxCharsPerLine);
-            this.value = processedText; // Update the textarea with processed text
+            const text = textarea.value;
+            const lines = simulateWordWrapping(text, maxCharsPerLine);
+            const fits = lines.length <= maxLines;
 
-            // Update character and line count display (optional)
-            const lines = processedText.split('\n');
-            let charCount = 0;
-            for (const line of lines) {
-                charCount += line.length;
+            if (fits) {
+                text_limits.textContent = `Lines used: ${lines.length} / ${maxLines}`;
+                text_limits.style.color = 'green';
+                textarea.style.backgroundColor = '#e8f5e9'; // Light Green Background
+                addEntryBtn.disabled = false;
+                generatePdfBtn.disabled = false;
+                addEntryBtn.style.opacity = 1;
+                generatePdfBtn.style.opacity = 1;
+            } else {
+                text_limits.textContent = `Limit exceeded! Lines used: ${lines.length} / ${maxLines}`;
+                text_limits.style.color = 'red';
+                textarea.style.backgroundColor = '#ffebee'; // Light Red Background
+                addEntryBtn.disabled = true;
+                generatePdfBtn.disabled = true;
+                addEntryBtn.style.opacity = 0.5;
+                generatePdfBtn.style.opacity = 0.5;
             }
-            text_limits.innerHTML = `${charCount} / ${maxLines * maxCharsPerLine} characters (${lines.length} / ${maxLines} lines)`;
         });
+
+        function simulateWordWrapping(text, maxCharsPerLine) {
+            const lines = [];
+            const paragraphs = text.split('\n');
+
+            paragraphs.forEach((paragraph) => {
+                const words = paragraph.split(' ');
+                let currentLine = '';
+
+                words.forEach((word) => {
+                    if ((currentLine + word).length <= maxCharsPerLine) {
+                        currentLine += (currentLine? ' ' : '') + word;
+                    } else {
+                        lines.push(currentLine);
+                        currentLine = word;
+                    }
+                });
+                if (currentLine) {
+                    lines.push(currentLine);
+                }
+            });
+            return lines;
+        }
 
         textarea.addEventListener('wheel', function (event) { // Optional: Prevent mouse wheel scrolling
             event.preventDefault();
