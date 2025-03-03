@@ -41,6 +41,8 @@ def generate_pdf():
             hod = entry.get("hod")
             main = entry.get("main")
 
+            main = main.replace(r'\n', '\n')  # Replace escaped newlines with actual newlines
+
             text_positions = [
                 (130, 178, day), (440, 178, date), (300, 198, industry),
                 (160, 218, in_time), (440, 218, out_time), (300, 233, department),

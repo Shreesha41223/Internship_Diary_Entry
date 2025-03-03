@@ -339,7 +339,10 @@ button:hover {
                 return;
             }
 
-            let entry = { day, date, industry, inTime, outTime, department, software, hod, main };
+            const dateParts = date.split('-');
+            const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+
+            let entry = { day, date:formattedDate , industry, inTime, outTime, department, software, hod, main };
             
             if (editingIndex !== -1) {
 
@@ -368,6 +371,18 @@ button:hover {
             displayEntries();
         }
 
+        function escapeHtml(text) {
+                var map = {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;'
+                };
+
+                return text.replace(/[&<>"']/g, function (m) { return map[m]; });
+        }
+
        function displayEntries() {
 
             if (entries.length > 0) {
@@ -381,7 +396,7 @@ button:hover {
             entriesDiv.innerHTML = "";
             entries.forEach((entry, index) => {
                 let div = document.createElement("div");
-                let formattedMain = entry.main.replace(/\n/g, "<br>");
+                let formattedMain = escapeHtml(entry.main).replace(/\n/g, "<br>");
                 div.className = "entry";
                 div.innerHTML = `
             <div>
