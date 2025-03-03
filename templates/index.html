@@ -190,6 +190,13 @@ button:hover {
         font-size: 12px;
     }
 }
+
+#charCount {
+  display: block; /* or inline-block if you want it inline */
+  font-size: 14px; /* Adjust the font size as needed */
+  color: #5f6368; /* Adjust the color as needed */
+  margin-top: 5px; /* Adjust spacing as needed */
+}
     </style>
 </head>
 
@@ -210,7 +217,7 @@ button:hover {
 
             <div class="form-group">
                 <label for="industry">Industry / Institute Name:</label>
-                <input type="text" id="industry" placeholder="Enter industry">
+                <input type="text" id="industry" placeholder="Enter industry" maxlength="40">
                 <span class="sub-text">Name of the Industry / Institute where the Internship is being undertaken</span>
             </div>
 
@@ -226,24 +233,25 @@ button:hover {
 
             <div class="form-group">
                 <label for="department">Department / Division:</label>
-                <input type="text" id="department" placeholder="Enter department">
+                <input type="text" id="department" placeholder="Enter department" maxlength="40">
             </div>
 
             <div class="form-group">
                 <label for="software">Software / Product:</label>
-                <input type="text" id="software" placeholder="Enter software used">
+                <input type="text" id="software" placeholder="Enter software used" maxlength="40">
                 <span class="sub-text">Name of the Software / Product being worked on</span>
             </div>
 
             <div class="form-group">
                 <label for="hod">HOD / Supervisor (Name & Email):</label>
-                <input type="text" id="hod" placeholder="Enter HOD details">
+                <input type="text" id="hod" placeholder="Enter HOD details" maxlength="40">
             </div>
         </div>
 
         <div class="form-group">
             <label for="main">Main points of the day:</label>
             <textarea id="main" rows="4" placeholder="Enter today's diary content"></textarea>
+            <span id="text_limits"></span>
         </div>
 
         <button id="addEntryBtn" onclick="addEntry()">Add Entry</button>
@@ -256,10 +264,15 @@ button:hover {
 
     <script>
 
+        const inputEvent = new Event('input');
+
         let dateInput = document.getElementById("date");
         let inTimeInput = document.getElementById("inTime");
         let outTimeInput = document.getElementById("outTime");
         let textarea = document.getElementById('main'); // Get the textarea element
+        const text_limits = document.getElementById('text_limits'); // Get the character count element
+        const maxCharsPerLine = 75;
+        const maxLines = 16;
 
         dateInput.addEventListener('click', function () {
             this.showPicker();
@@ -271,9 +284,77 @@ button:hover {
             this.showPicker();
         });
 
+        function processText(main, maxLines = 16, maxCharsPerLine = 75) {
+                const lines = main.split('\n');
+                const processedLines = [];
+                let lineCount = 0;
+
+                for (const line of lines) {
+                    const words = line.split(' ');
+                    let currentLine = '';
+
+                    for (const word of words) {
+                        if (currentLine.length + word.length + (currentLine ? 1 : 0) <= maxCharsPerLine) {
+                            currentLine += (currentLine ? ' ' : '') + word;
+                        } else {
+                            if (lineCount < maxLines) {
+                                processedLines.push(currentLine);
+                                lineCount++;
+                                currentLine = word;
+                            } else {
+                                // Limit exceeded, show popup and return
+                                alert("Maximum lines exceeded!");
+                                return processedLines.slice(0, maxLines).join('\n');
+                            }
+                        }
+                    }
+
+                    if (currentLine && lineCount < maxLines) {
+                        processedLines.push(currentLine);
+                        lineCount++;
+                    }
+                    if (lineCount >= maxLines) {
+                        alert("Maximum lines exceeded!");
+                        return processedLines.slice(0, maxLines).join('\n');
+                    }
+                }
+
+                return processedLines.slice(0, maxLines).join('\n');
+        }
+
+        textarea.addEventListener('paste', function (event) {
+            const pastedText = (event.clipboardData || window.clipboardData).getData('text');
+            const newText = this.value + pastedText;
+            const processedText = processText(newText, maxLines, maxCharsPerLine);
+
+            this.value = processedText; // Update the textarea with processed text
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+            event.preventDefault(); // Prevent default paste
+
+            // Update character and line count display (optional)
+            const lines = processedText.split('\n');
+            let charCount = 0;
+            for (const line of lines) {
+                charCount += line.length;
+            }
+            text_limits.innerHTML = `${charCount} / ${maxLines * maxCharsPerLine} characters (${lines.length} / ${maxLines} lines)`;
+        });
+
         textarea.addEventListener('input', function () {
-            this.style.height = 'auto'; // Reset the height to auto
-            this.style.height = (this.scrollHeight) + 'px'; // Set the height to the scroll height
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+
+            const processedText = processText(this.value, maxLines, maxCharsPerLine);
+            this.value = processedText; // Update the textarea with processed text
+
+            // Update character and line count display (optional)
+            const lines = processedText.split('\n');
+            let charCount = 0;
+            for (const line of lines) {
+                charCount += line.length;
+            }
+            text_limits.innerHTML = `${charCount} / ${maxLines * maxCharsPerLine} characters (${lines.length} / ${maxLines} lines)`;
         });
 
         textarea.addEventListener('wheel', function (event) { // Optional: Prevent mouse wheel scrolling
@@ -300,8 +381,11 @@ button:hover {
 
             const entry = entries[index];
 
+            const dateParts = entry.date.split('-');
+            const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+
             document.getElementById("day").value = entry.day;
-            document.getElementById("date").value = entry.date;
+            document.getElementById("date").value = formattedDate;
             document.getElementById("industry").value = entry.industry;
             document.getElementById("inTime").value = entry.inTime;
             document.getElementById("outTime").value = entry.outTime;
@@ -310,7 +394,6 @@ button:hover {
             document.getElementById("hod").value = entry.hod;
             document.getElementById("main").value = entry.main;
 
-            const inputEvent = new Event('input');
             document.getElementById("main").dispatchEvent(inputEvent);
 
             const addEntryButton = document.getElementById("addEntryBtn");
@@ -426,6 +509,7 @@ button:hover {
             document.getElementById("day").value = "";
             document.getElementById("date").value = "";
             document.getElementById("main").value = "";
+            text_limits.innerHTML = ``;
         }
 
         async function generatePDF() {
